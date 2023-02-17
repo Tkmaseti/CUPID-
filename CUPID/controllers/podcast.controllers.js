@@ -1,15 +1,14 @@
 const db = require("../models")
-const Event = db.events
+const Podcast = db.postcast;
 const Role = db.role;
 
-exports.createEvent = (req, res) => {
-    const event = new Event({
+exports.createPodcast = (req, res) => {
+    const podcast = new Podcast({
       title: req.body.title,
       image: req.body.image,
-      about: req.body.about,
-      eventUrl: req.body.eventUrl  
+      podcastUrl: req.body.podcastUrl
     });
-    event.save(event).then(data => {
+    podcast.save(podcast).then(data => {
       res.send(data)
     }).catch(err => {
       res.status(500).send({
@@ -24,7 +23,7 @@ exports.findAll = (req, res) => {
 
   var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
 
-  Event.find(condition)
+  Podcast.find(condition)
     .then(data => {
       res.send(data);
     })
@@ -38,7 +37,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Event.findById(id)
+  Podcast.findById(id)
     .then(data => {
       if (!data)
         res.status(404).send({ message: "Not found Product with id " + id });
@@ -60,7 +59,7 @@ exports.update = (req, res) => {
 
   const id = req.params.id;
 
-  Event.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  Podcast.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
@@ -78,7 +77,7 @@ exports.update = (req, res) => {
 exports.deleteOne = (req, res) => {
   const id = req.params.id;
 
-  Event.findByIdAndRemove(id, { useFindAndModify: false })
+  Podcast.findByIdAndRemove(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
@@ -98,7 +97,7 @@ exports.deleteOne = (req, res) => {
 };
 
 exports.deleteAll = (req, res) => {
-  Event.deleteMany({})
+    Podcast.deleteMany({})
     .then(data => {
       res.send({
         message: ` ${data.deletedCount} Event were deleted successfully!`

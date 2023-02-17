@@ -6,7 +6,7 @@ const db = require("./models");
 const Role = db.role;
 const dbConfig = require("./config/db.config")
 
-db.mongoose.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+db.mongoose.connect(dbConfig.url, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -14,10 +14,10 @@ db.mongoose.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`
     console.log("Successfully connected to mongodb");
     initial();
 })
-.catch( err => {
-    console.err("Connection error", err);
-    process.exit();
-});
+// .catch( err => {
+//     console.err("Connection error", err);
+//     process.exit();
+// });
 
 function initial() {
     Role.estimatedDocumentCount((err, count) => {
@@ -26,11 +26,6 @@ function initial() {
             .save(err => {
                 if(err){console.log("error", err);}
                 console.log("added 'user' to roles collection");
-            });
-            new Role({name: "moderator"})
-            .save(err => {
-                if(err) {console.log("error", err);}
-                console.log("added 'moderator' to roles collection");
             });
             new Role({name: "admin"})
             .save(err => {
@@ -62,3 +57,7 @@ app.listen(PORT, () => {
 
 require("./routes/auth.routes")(app);
 require("./routes/user.routes")(app);
+require("./routes/events.routes")(app);
+require("./routes/gifts.routes")(app);
+require("./routes/postcast.routes")(app);
+require("./routes/restuarants.routes")(app);
